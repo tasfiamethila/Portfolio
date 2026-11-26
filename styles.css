@@ -8,6 +8,28 @@
     --chocolate: #3B281E;       /* Dark Chocolate Typography */
     --warm-brown: #6E5244;      /* Warm Brown Body Text */
     --border-soft: #EADAD3;     /* Subtle Border */
+    --nav-bg: rgba(255, 251, 249, 0.88);
+    --box-hover: #F6ECE6;
+    --btn-primary-bg: #3B281E;
+    --btn-primary-text: #FFFBF9;
+    --btn-primary-hover: #573C2E;
+}
+
+/* Dark Mode Palette (toggled via JavaScript) */
+body.dark-mode {
+    --bg-main: #1A1412;
+    --card-bg: #241C19;
+    --soft-box: #2D231F;
+    --accent-pink: #5C3F42;
+    --border-pink: #8A6165;
+    --chocolate: #F7ECE6;
+    --warm-brown: #D6C1B8;
+    --border-soft: #3D302B;
+    --nav-bg: rgba(36, 28, 25, 0.9);
+    --box-hover: #352925;
+    --btn-primary-bg: #E8C7C8;
+    --btn-primary-text: #241C19;
+    --btn-primary-hover: #F3D9DA;
 }
 
 * {
@@ -18,7 +40,7 @@
 
 html {
     scroll-behavior: smooth;
-    scroll-padding-top: 95px; /* Keeps section titles clear below sticky navbar */
+    scroll-padding-top: 95px;
 }
 
 body {
@@ -27,9 +49,10 @@ body {
     color: var(--chocolate);
     line-height: 1.65;
     overflow-x: hidden;
+    transition: background-color 0.4s ease, color 0.4s ease;
 }
 
-/* Soft Entry Animation */
+/* Soft Entry & Gentle Float Animations */
 @keyframes softReveal {
     0% {
         opacity: 0;
@@ -41,19 +64,38 @@ body {
     }
 }
 
+@keyframes gentleFloat {
+    0%, 100% {
+        transform: translateY(0px);
+    }
+    50% {
+        transform: translateY(-6px);
+    }
+}
+
+@keyframes softRipple {
+    0% {
+        box-shadow: 0 0 0 0 rgba(212, 165, 167, 0.45);
+    }
+    100% {
+        box-shadow: 0 0 0 12px rgba(212, 165, 167, 0);
+    }
+}
+
 /* Navigation Bar */
 .navbar {
     display: flex;
     justify-content: space-between;
     align-items: center;
+    gap: 1rem;
     padding: 1.15rem 8%;
-    background-color: rgba(255, 251, 249, 0.88);
+    background-color: var(--nav-bg);
     backdrop-filter: blur(10px);
     border-bottom: 1px solid var(--border-soft);
     position: sticky;
     top: 0;
     z-index: 1000;
-    transition: background-color 0.35s ease, box-shadow 0.35s ease;
+    transition: background-color 0.35s ease, border-color 0.35s ease, box-shadow 0.35s ease;
 }
 
 .logo {
@@ -109,6 +151,26 @@ body {
     width: 100%;
 }
 
+/* Light / Dark Mode Toggle Button */
+.theme-toggle-btn {
+    background-color: var(--soft-box);
+    color: var(--chocolate);
+    border: 1.5px solid var(--border-pink);
+    padding: 0.5rem 1.05rem;
+    border-radius: 22px;
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    font-size: 0.85rem;
+    font-weight: 600;
+    cursor: pointer;
+    white-space: nowrap;
+    transition: transform 0.3s ease, background-color 0.35s ease, color 0.35s ease, border-color 0.35s ease;
+}
+
+.theme-toggle-btn:hover {
+    background-color: var(--accent-pink);
+    transform: translateY(-2px);
+}
+
 /* Container & Cards */
 .container {
     max-width: 1100px;
@@ -126,7 +188,11 @@ body {
     padding: 3rem;
     box-shadow: 0 12px 35px rgba(59, 40, 30, 0.05);
     animation: softReveal 0.8s cubic-bezier(0.22, 1, 0.36, 1) both;
-    transition: transform 0.4s cubic-bezier(0.22, 1, 0.36, 1), box-shadow 0.4s cubic-bezier(0.22, 1, 0.36, 1);
+    transition:
+        background-color 0.4s ease,
+        border-color 0.4s ease,
+        transform 0.45s cubic-bezier(0.22, 1, 0.36, 1),
+        box-shadow 0.45s cubic-bezier(0.22, 1, 0.36, 1);
 }
 
 .page-card:hover {
@@ -137,13 +203,15 @@ body {
 /* Hero / Intro Section */
 .hero-section {
     display: flex;
-    align-items: center;
+    flex-direction: row;
+    align-items: flex-start;
     justify-content: space-between;
     gap: 3rem;
 }
 
 .hero-left {
     flex: 1.3;
+    min-width: 0;
 }
 
 .sub-heading {
@@ -155,7 +223,7 @@ body {
     padding: 6px 14px;
     border-radius: 20px;
     margin-bottom: 1rem;
-    transition: transform 0.3s ease;
+    transition: transform 0.3s ease, background-color 0.35s ease, color 0.35s ease;
 }
 
 .sub-heading:hover {
@@ -182,12 +250,12 @@ body {
     background-color: var(--soft-box);
     border-left: 3px solid var(--border-pink);
     border-radius: 0 14px 14px 0;
-    transition: transform 0.35s ease, background-color 0.35s ease;
+    transition: transform 0.35s ease, background-color 0.35s ease, border-color 0.35s ease;
 }
 
 .bio-box:hover {
     transform: translateX(6px);
-    background-color: #F6ECE6;
+    background-color: var(--box-hover);
 }
 
 .bio-box h3 {
@@ -216,17 +284,18 @@ body {
     border-radius: 30px;
     font-weight: 500;
     font-size: 0.92rem;
+    cursor: pointer;
     transition: all 0.35s cubic-bezier(0.25, 0.8, 0.25, 1);
 }
 
 .btn-primary {
-    background-color: var(--chocolate);
-    color: #FFFBF9;
+    background-color: var(--btn-primary-bg);
+    color: var(--btn-primary-text);
     box-shadow: 0 6px 18px rgba(59, 40, 30, 0.14);
 }
 
 .btn-primary:hover {
-    background-color: #573C2E;
+    background-color: var(--btn-primary-hover);
     transform: translateY(-3px);
     box-shadow: 0 10px 24px rgba(59, 40, 30, 0.2);
 }
@@ -242,31 +311,114 @@ body {
     transform: translateY(-3px);
 }
 
-/* Profile Image Frame */
+/* Right Column: Photo slightly lower (aligned near Introduction title), greeting box right below photo */
 .hero-right {
-    flex: 0.8;
+    flex: 0 0 320px;
+    max-width: 100%;
     display: flex;
-    justify-content: center;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    margin-top: 115px;
+    gap: 14px;
 }
 
 .image-frame {
+    order: 1;
+    width: 284px;
+    max-width: 100%;
     padding: 12px;
     background: linear-gradient(145deg, #EAD5D6, #F3E5DC);
     border-radius: 24px;
     box-shadow: 0 10px 28px rgba(59, 40, 30, 0.08);
-    transition: transform 0.45s cubic-bezier(0.22, 1, 0.36, 1);
+    animation: gentleFloat 5.5s ease-in-out infinite;
+    transition: transform 0.45s cubic-bezier(0.22, 1, 0.36, 1), box-shadow 0.45s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+body.dark-mode .image-frame {
+    background: linear-gradient(145deg, #473335, #382B26);
+    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.35);
 }
 
 .image-frame:hover {
-    transform: translateY(-6px) scale(1.02);
+    transform: translateY(-5px) scale(1.015);
+    box-shadow: 0 14px 32px rgba(59, 40, 30, 0.12);
 }
 
 .profile-img {
-    width: 260px;
-    height: 360px;
+    width: 100%;
+    height: 350px;
     object-fit: cover;
     border-radius: 16px;
     display: block;
+}
+
+/* Greeting Box directly below photo */
+.greeting-box,
+.greeting-box.centered-greeting {
+    order: 2;
+    width: 100%;
+    max-width: 300px;
+    margin-top: 2px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    gap: 10px;
+}
+
+.soft-btn {
+    position: relative;
+    overflow: hidden;
+    letter-spacing: 0.3px;
+    white-space: nowrap;
+}
+
+.soft-btn.btn-pulse {
+    animation: softRipple 0.65s ease-out;
+}
+
+.greeting-text {
+    margin: 0;
+    padding: 8px 14px;
+    border-radius: 12px;
+    width: 100%;
+    text-align: center;
+    font-size: 0.92rem;
+    line-height: 1.6;
+    color: var(--warm-brown);
+    opacity: 0;
+    transform: translateY(10px) scale(0.97);
+    filter: blur(2px);
+    transition:
+        opacity 0.55s cubic-bezier(0.22, 1, 0.36, 1),
+        transform 0.55s cubic-bezier(0.22, 1, 0.36, 1),
+        filter 0.55s ease,
+        background-color 0.35s ease,
+        color 0.35s ease;
+}
+
+.greeting-text.is-visible {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+    filter: blur(0);
+    background-color: var(--soft-box);
+    border: 1px solid var(--border-soft);
+}
+
+/* Soft Scroll Reveal */
+.soft-reveal {
+    opacity: 0;
+    transform: translateY(18px) scale(0.985);
+    transition:
+        opacity 0.55s cubic-bezier(0.22, 1, 0.36, 1),
+        transform 0.55s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.soft-reveal.is-visible {
+    opacity: 1;
+    transform: translateY(0) scale(1);
 }
 
 /* Expertise & Projects Grid */
@@ -281,12 +433,12 @@ body {
     border: 1px solid var(--border-soft);
     border-radius: 18px;
     padding: 1.4rem;
-    transition: transform 0.35s ease, background-color 0.35s ease, box-shadow 0.35s ease;
+    transition: transform 0.35s ease, background-color 0.35s ease, border-color 0.35s ease, box-shadow 0.35s ease;
 }
 
 .info-card:hover {
     transform: translateY(-4px);
-    background-color: #F6ECE6;
+    background-color: var(--box-hover);
     box-shadow: 0 8px 20px rgba(59, 40, 30, 0.06);
 }
 
@@ -299,6 +451,33 @@ body {
 .info-card p {
     font-size: 0.93rem;
     color: var(--warm-brown);
+}
+
+/* Project Links inside Info Cards */
+.project-viewer {
+    margin-top: 0.85rem;
+}
+
+.view-project-btn {
+    cursor: pointer;
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: var(--chocolate);
+}
+
+.project-files {
+    margin-top: 0.6rem;
+    font-size: 0.88rem;
+    color: var(--warm-brown);
+}
+
+.project-files ul {
+    padding-left: 1.1rem;
+    margin-top: 0.3rem;
+}
+
+.project-files a {
+    color: var(--chocolate);
 }
 
 /* Social & Contact Links */
@@ -327,9 +506,9 @@ body {
 }
 
 .social-btn:hover {
-    background-color: var(--chocolate);
-    color: #FFFBF9;
-    border-color: var(--chocolate);
+    background-color: var(--btn-primary-bg);
+    color: var(--btn-primary-text);
+    border-color: var(--btn-primary-bg);
     transform: translateY(-3px);
 }
 
@@ -361,7 +540,14 @@ body {
 
     .hero-section {
         flex-direction: column-reverse;
+        align-items: center;
         text-align: center;
+    }
+
+    .hero-right {
+        flex: none;
+        width: 100%;
+        margin-top: 0;
     }
 
     .bio-box {
@@ -375,5 +561,33 @@ body {
 
     .info-grid {
         grid-template-columns: 1fr;
+    }
+}
+
+/* Reduced Motion Support */
+@media (prefers-reduced-motion: reduce) {
+    html {
+        scroll-behavior: auto;
+    }
+
+    .image-frame,
+    .soft-btn.btn-pulse,
+    .page-card {
+        animation: none !important;
+    }
+
+    .soft-reveal,
+    .greeting-text,
+    a,
+    button,
+    .btn,
+    .page-card,
+    .bio-box,
+    .image-frame,
+    .profile-img {
+        transition: none !important;
+        opacity: 1 !important;
+        transform: none !important;
+        filter: none !important;
     }
 }
